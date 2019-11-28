@@ -44,10 +44,10 @@
 		<script id="main-program">
 			function main() {
 				// Defined objects's points in the scene here
-				let ground_pts = [ 0, 0, 0,
-        						   0.5, 0, 0,
-        						   0.5, 0.5, 0,
-        						   0, 0.5, 0    ];
+				let ground_pts = [ -1, -0.5, 0,
+									1, -0.5, 0,
+								   -1, -1, 0,
+								   1, -1, 0];
 
 				const canvas = document.getElementById('master');
 
@@ -87,7 +87,7 @@
 				gl.clearColor(0.0, 0.0, 0.0, 1.0);
 				gl.clear(gl.COLOR_BUFFER_BIT);
 
-				function drawGround(object, primitiveType = gl.TRIANGLE_FAN) {
+				function drawGround(object, primitiveType = gl.TRIANGLE_STRIP) {
 					gl.bindBuffer(gl.ARRAY_BUFFER, object.buffer);
 					gl.vertexAttribPointer(a_position_pointer, object.nComponents, gl.FLOAT, false, 0, 0);
 					gl.drawArrays(primitiveType, 0, object.nVertices);
