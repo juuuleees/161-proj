@@ -7,7 +7,7 @@
 	</head>
 
 	<body>
-		<canvas id="master" width="500px" height="700px"></canvas>
+		<canvas id="master" width="500px" height="600px"></canvas>
 
 		<!-- WebGL setup libraries -->
 		<script src="./utils/webgl-init.js"></script>
@@ -38,11 +38,17 @@
 				outColor = vec4(1, 0, 0.5, 1);
 			}
 
-		</script>
+		</script>		
 
 		<!-- Main program -->
 		<script id="main-program">
 			function main() {
+				// Defined objects's points in the scene here
+				let ground_pts = [ 0, 0, 0,
+        						   0.5, 0, 0,
+        						   0.5, 0.5, 0,
+        						   0, 0.5, 0    ];
+
 				const canvas = document.getElementById('master');
 
 				if (!canvas) {
@@ -57,14 +63,38 @@
 				const fragment_shader = initShader(gl, gl.FRAGMENT_SHADER, fragment_shader_source);
 				const program = initProgram(gl,vertex_shader, fragment_shader);
 
+				const a_position_pointer = gl.getAttribLocation(program, 'a_position');
+				const a_point_size_pointer = gl.getAttribLocation(program, 'a_point_size');
+
+				gl.enable(gl.DEPTH_TEST);
+				gl.enableVertexAttribArray(a_position_pointer);
+
 				gl.useProgram(program);
+
+				const ground_buffer = gl.createBuffer();
+				gl.bindBuffer(gl.ARRAY_BUFFER, ground_buffer);
+				gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(ground_pts), gl.STATIC_DRAW);
+				gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+				// Defined the objects themselves here
+				let ground = {
+        			"buffer": ground_buffer,
+        			"color": [1,0,0,1.0],
+        			"nComponents": 3,
+        			"nVertices": 4
+        		}
 
 				gl.clearColor(0.0, 0.0, 0.0, 1.0);
 				gl.clear(gl.COLOR_BUFFER_BIT);
 
-				// drawObject(object) {
+				function drawGround(object, primitiveType = gl.TRIANGLE_FAN) {
+					gl.bindBuffer(gl.ARRAY_BUFFER, object.buffer);
+					gl.vertexAttribPointer(a_position_pointer, object.nComponents, gl.FLOAT, false, 0, 0);
+					gl.drawArrays(primitiveType, 0, object.nVertices);
+					gl.bindBuffer(gl.ARRAY_BUFFER, null);
+				}
 
-				// }
+				drawGround(ground);
 
 			}
 			main();
