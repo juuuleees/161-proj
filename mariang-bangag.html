@@ -7,7 +7,7 @@
 	</head>
 
 	<body>
-		<canvas id="master"></canvas>
+		<canvas id="master" width="500px" height="800px"></canvas>
 
 		<!-- WebGL setup libraries -->
 		<script src="./utils/webgl-init.js"></script>
@@ -15,7 +15,7 @@
 		<script src="./utils/webgl-utils.js"></script>
 
 		<!-- Vertex shader program -->
-		<script id="vertex-shader">
+		<script id="vertex-shader" type="notjs">#version 300 es
 			
 			in vec4 a_position;
 			in float a_point_size;
@@ -28,7 +28,7 @@
 		</script>
 
 		<!-- Fragment shader program -->
-		<script id="fragment-shader">
+		<script id="fragment-shader" type="notjs">#version 300 es
 			
 			precision mediump float;
 
@@ -54,17 +54,20 @@
 				const fragment_shader_source = document.getElementById('fragment-shader').text;
 
 				const vertex_shader = initShader(gl, gl.VERTEX_SHADER, vertex_shader_source);
-				const fragment_shader = initShader(gl, gl.FRAGMENT, fragment_shader_source);
-				const program = initProgram(vertex_shader, fragment_shader);
+				const fragment_shader = initShader(gl, gl.FRAGMENT_SHADER, fragment_shader_source);
+				const program = initProgram(gl,vertex_shader, fragment_shader);
 
-				gl.useProgram();
+				gl.useProgram(program);
 
 				gl.clearColor(0.0, 0.0, 0.0, 1.0);
 				gl.clear(gl.COLOR_BUFFER_BIT);
 
-				// const 
-			}
-		</script>
+				// drawObject(object) {
 
+				// }
+
+			}
+			main();
+		</script>
 	</body>
 </html>
